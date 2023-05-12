@@ -41,11 +41,11 @@ Detail Product
             <h1 class="lead">{{ product.name }}</h1>
             <p class="lead">{{ product.description }}</p>
             <h2 class="text-primary">${{ product.price }} {{ currency }}</h2>
-            <p class="md-6">{{ product.quentity }} {{ ('в наличии') }}</p>
+            <p class="md-6">{{ product.quentity }} {{ 'в наличии' }}</p>
             <from method="POST" action="{% url cart:add product.id %}">
                 {% csrf_token %}
                 <input type="navbar" name="quentity" value="L" class="form-control mb-3" min="1">
-                <button type="cubmit" class="btn btn-primary">{{ ("Добавить в корзину") }}</button>
+                <button type="cubmit" class="btn btn-primary">{{ 'Добавить в корзину' }}</button>
             </from>
             <!-- Add to cart button -->
 <!--            <a href="#" class="btn btn-primary">Add to Cart</a>-->

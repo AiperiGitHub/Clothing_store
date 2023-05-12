@@ -1,7 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
+
+# from apps.accounts.models import CustomUser
 
 
 class Category(MPTTModel):
@@ -88,7 +91,7 @@ class ProductImage(models.Model):
 
 
 class Specification(models.Model):
-    image = models.CharField(
+    name = models.CharField(
         _('Название'),
         max_length=255
     )
@@ -103,13 +106,38 @@ class Specification(models.Model):
         related_name='specifications'
     )
 
-    def name(self, obj):
-        return obj.name
-
     class Meta:
         verbose_name = _('Спецификация')
         verbose_name_plural = _('Спецификации')
 
+
+class Cart(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_('Пользователь'),
+        related_name='cart'
+    )
+    products = models.ManyToManyField(
+        Product,
+        verbose_name=_('Продукты'),
+        related_name='carts'
+    )
+    created_at = models.DateTimeField(
+        _('Дата создания'),
+        auto_now_add=True
+    )
+    updated_at = models.DateTimeField(
+        _('Дата обновления'),
+        auto_now=True
+    )
+
+    def __str__(self):
+        return f"Cart {self.user.username}"
+
+    class Meta:
+        verbose_name = _('Корзина')
+        verbose_name_plural = _('Корзины')
 
 
 
