@@ -4,8 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-# from apps.accounts.models import CustomUser
-
 
 class Category(MPTTModel):
     name = models.CharField(
@@ -37,10 +35,20 @@ class Category(MPTTModel):
         verbose_name_plural = _('Категории')
 
 
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True)
+    email = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(
         _('Название'),
-        max_length=255
+        max_length=255,
+        null=True
     )
     description = models.TextField(
         _('Описание'),
@@ -61,6 +69,7 @@ class Product(models.Model):
         verbose_name=_('Категория'),
         related_name='products'
     )
+    digital = models.BooleanField(default=False, null=True, blank=False)
 
     def __str__(self):
         return self.name
@@ -73,6 +82,8 @@ class Product(models.Model):
 class ProductImage(models.Model):
     image = models.ImageField(
         _('Изображение'),
+        null=True,
+        blank=True,
         upload_to='product_images/'
     )
     product = models.ForeignKey(
@@ -111,33 +122,36 @@ class Specification(models.Model):
         verbose_name_plural = _('Спецификации')
 
 
-class Cart(models.Model):
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name=_('Пользователь'),
-        related_name='cart'
-    )
-    products = models.ManyToManyField(
-        Product,
-        verbose_name=_('Продукты'),
-        related_name='carts'
-    )
-    created_at = models.DateTimeField(
-        _('Дата создания'),
-        auto_now_add=True
-    )
-    updated_at = models.DateTimeField(
-        _('Дата обновления'),
-        auto_now=True
-    )
+class Order(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    date_orderd = models.DateTimeField(auto_now_add=True)
+    complete = models.BooleanField(default=False, null=True, blank=False)
+    transaction_id = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return f"Cart {self.user.username}"
+        return str(self.id)
 
-    class Meta:
-        verbose_name = _('Корзина')
-        verbose_name_plural = _('Корзины')
+
+class OrderItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class ShippingAddress(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    address = models.CharField(max_length=200, null=True)
+    city = models.CharField(max_length=200, null=True)
+    state = models.CharField(max_length=200, null=True)
+    zipcode = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return str(self.address)
 
 
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Category, Product, ProductImage, Specification
+from .models import Category, Product, ProductImage, Specification, Customer, Order, OrderItem, ShippingAddress
 
 
 class ProductImageInline(admin.TabularInline):
@@ -82,7 +82,10 @@ class SpecificationAdmin(admin.ModelAdmin):
     )
 
 
-
+admin.site.register(Customer)
+admin.site.register(Order)
+admin.site.register(OrderItem)
+admin.site.register(ShippingAddress)
 
 
 

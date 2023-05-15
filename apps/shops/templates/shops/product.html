@@ -1,5 +1,6 @@
+{% extends 'base.html' %}
 {% block title %}
-Detail Product
+    Detail Product
 {% endblock %}
 
 {% block content %}
@@ -19,7 +20,7 @@ Detail Product
                 <div class="carousel-inner">
                     {% for image in product.images.all %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <img src="{{ image.image }}" class="d-block w-100" alt="{{ image.product.name }}">
+                        <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.url.product.name }}">
                     </div>
                     {% endfor %}
                 </div>
@@ -34,21 +35,30 @@ Detail Product
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
-<!--            <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" />-->
         </div>
         <div class="col-md-6">
             <!-- Product details -->
             <h1 class="lead">{{ product.name }}</h1>
             <p class="lead">{{ product.description }}</p>
-            <h2 class="text-primary">${{ product.price }} {{ currency }}</h2>
-            <p class="md-6">{{ product.quentity }} {{ 'в наличии' }}</p>
-            <from method="POST" action="{% url cart:add product.id %}">
+            <h2 class="text-primary">{{ product.price }} сомов {{ currency }}</h2>
+            <p class="md-6">{{ product.quantity }} {{ 'в наличии' }}</p>
+            {% if product.specifications.all %}
+            <div class="nt-4">
+                <h3>Характеристики:</h3>
+                <ul class="list-unstyled">
+                    {% for specification in product.specifications.all %}
+                    <li><strong>{{ specification.name }}</strong>: {{ specification.value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% comment %}
+            <form method="POST" action="{% url 'cart:add' product.id %}">
                 {% csrf_token %}
-                <input type="navbar" name="quentity" value="L" class="form-control mb-3" min="1">
-                <button type="cubmit" class="btn btn-primary">{{ 'Добавить в корзину' }}</button>
-            </from>
-            <!-- Add to cart button -->
-<!--            <a href="#" class="btn btn-primary">Add to Cart</a>-->
+                <input type="number" name="quentity" value="1" class="form-control mb-3" min="1">
+                <button type="submit" class="btn btn-primary">{{ 'Добавить в корзину' }}</button>
+            </form>
+            {% endcomment %}
         </div>
     </div>
 </div>

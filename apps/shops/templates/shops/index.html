@@ -21,7 +21,7 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Product image-->
-                    <img class="card-img-top" src="{{ product.images.first.image.url }}" alt="..." />
+                    <img class="card-img-top custom-image" src="{{ product.images.first.image.url }}" alt="..." />
 <!--                    src="{{ product_image.image.url }}"-->
                     <!-- Product details-->
                     <div class="card-body p-4">
@@ -30,14 +30,15 @@
                             <h5 class="fw-bolder">{{ product.name }}</h5>
                             <!-- Product price-->
                             {{ product.price }} сомов
-                            {% for specification in product.specifications.all %}
-                            <p><strong>{{ specification.name }}</strong>: {{ specification.value }}</p>
-                            {% endfor %}
                         </div>
                     </div>
                     <!-- Product actions-->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.pk %}">Подробнее</a></div>
+                        <div class="text-center">
+                            <a class="btn btn-outline-dark mt-auto animate__animated animate__fadeIn" href="{% url 'product' product.pk %}">Подробнее</a>
+                            <hr>
+                            <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                        </div>
                     </div>
                 </div>
             </div>
