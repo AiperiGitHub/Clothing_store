@@ -51,7 +51,7 @@
                     {% endfor %}
                 </ul>
             </div>
-            <form method="POST">
+            <form method="POST" action="{% url 'add-to-cart' product.pk %}">
                 {% csrf_token %}
 
                 <label for="quentity">Количество:</label>
@@ -64,11 +64,7 @@
                     <option value="grey">Серый</option>
                     <!-- Добавьте остальные варианты цветов, если нужно -->
                 </select>
-
-                <form method="post" action="{% url 'cart-add' product.pk %}">
-                    {% csrf_token %}
-                    <button type="submit">Add to Cart</button>
-                </form>
+                    <button type="submit" class="btn btn-primary">Добавить в корзину</button>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
             </form>
                 <style>

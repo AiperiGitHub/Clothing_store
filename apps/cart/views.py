@@ -24,19 +24,27 @@ class CartView(LoginRequiredMixin, View):
     #     return render(request, 'cart/index.html', {'cart': cart})
 
 
-class CardAddView(LoginRequiredMixin, View):
+class AddToCartView(LoginRequiredMixin, View):
+    login_url = '/admin/login/'
+
+    def post(self, request, product_id):
+        cart, created = Cart.objects.get_or_create(owner=request.user)
+        quantity = int(request.POST.get('quantity', '1'))
+        cart.add_product(product_id, quantity)
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class RemoveFromCartView(LoginRequiredMixin, View):
     login_url = '/admin/login/'
 
     def post(self, request, product_id):
         cart = Cart.objects.get(owner=request.user)
-        quantity = int(request.POST.get('quantity', '1'))
-        # cart.add_product(product_id, quantity)
-        # return redirect(request.META.get('HTTP_REFERER', '/'))
+
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
-            # Handle the case where the product does not exist
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
-        cart.add_product(product_id, quantity)
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+        cart.cart_items.filter(product=product).delete()
+        return render(request, 'cart.html', {'cart': cart})
+
