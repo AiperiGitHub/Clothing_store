@@ -5,12 +5,22 @@
 
 {% block content %}
 <!-- Header-->
-<header class="bg-dark py-5">
+<header class="bg-gray py-5">
     <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Our clothing, your comfort</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Термобелье</p>
-        </div>
+            <div style="position: relative; display: inline-block;">
+                <img src="https://fonarik-market.ru/wa-data/public/shop/products/10/webp/data/public/blog/img/5dea63bdb0869.webp"
+                     width="1200px" height="700px" alt="Моя картинка">
+
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center;">
+                <h1>Our clothing, your comfort</h1>
+                <p>termo.bishkek</p>
+                </div>
+<!--            <div class="text-center text-white">-->
+<!--                <h1 class="display-4 fw-bolder">Our clothing, your comfort</h1>-->
+<!--                <p class="lead fw-normal text-white-50 mb-0">Термобелье</p>-->
+<!--                <img class="card-img-top" src="{{ product.images.first.image }}" alt="{{ product.name }}">-->
+<!--            </div>-->
+            </div>
     </div>
 </header>
 <!-- Section-->
@@ -22,7 +32,6 @@
                 <div class="card h-100">
                     <!-- Product image-->
                     <img class="card-img-top custom-image" src="{{ product.images.first.image.url }}" alt="..." />
-<!--                    src="{{ product_image.image.url }}"-->
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -36,9 +45,10 @@
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="text-center">
                             <a class="btn btn-outline-dark mt-auto animate__animated animate__fadeIn" href="{% url 'product' product.pk %}">Подробнее</a>
-                            <hr>
-                            <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+<!--                            <hr>-->
+<!--                            <button class="btn btn-outline-secondary add-btn">Add to Basket</button>-->
                         </div>
+<!--                        <small class="text-muted">{{ product.price }} $.</small>-->
                     </div>
                 </div>
             </div>

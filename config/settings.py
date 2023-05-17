@@ -34,6 +34,7 @@ MY_APPS = [
     'apps.accounts',
     'apps.shops',
     'apps.orders',
+    'apps.cart',
 ]
 
 THIRD_PARTY_APPS = [

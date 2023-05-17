@@ -28,7 +28,7 @@ class Category(MPTTModel):
         return f"{self.name}"
 
     class MPTTMeta:
-        order_insertion_by = ['name']
+        order_insertion_by = ('name')
 
     class Meta:
         verbose_name = _('Категория')
@@ -116,6 +116,9 @@ class Specification(models.Model):
         verbose_name=_('Продукт'),
         related_name='specifications'
     )
+
+    def __str__(self):
+        return f'{self.product}-{self.name}'
 
     class Meta:
         verbose_name = _('Спецификация')

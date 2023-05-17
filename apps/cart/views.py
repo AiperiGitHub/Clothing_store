@@ -4,14 +4,24 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Cart
+from ..shops.models import Product
 
 
 class CartView(LoginRequiredMixin, View):
     login_url = '/admin/login/'
 
     def get(self, request):
-        cart = Cart.objects.prefetch_related('cart_items__product').get(owner=request.user)
-        return render(request, 'cart/index.html', {'cart': cart})
+        try:
+            cart = Cart.objects.prefetch_related('cart_items__product').get(owner=request.user)
+        except Cart.DoesNotExist:
+            # Handle the case where the cart does not exist
+            cart = None
+
+        return render(request, 'cart.html', {'cart': cart})
+
+    # def get(self, request):
+    #     cart = Cart.objects.prefetch_related('cart_items__product').get(owner=request.user)
+    #     return render(request, 'cart/index.html', {'cart': cart})
 
 
 class CardAddView(LoginRequiredMixin, View):
@@ -20,5 +30,13 @@ class CardAddView(LoginRequiredMixin, View):
     def post(self, request, product_id):
         cart = Cart.objects.get(owner=request.user)
         quantity = int(request.POST.get('quantity', '1'))
+        # cart.add_product(product_id, quantity)
+        # return redirect(request.META.get('HTTP_REFERER', '/'))
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            # Handle the case where the product does not exist
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
         cart.add_product(product_id, quantity)
         return redirect(request.META.get('HTTP_REFERER', '/'))
